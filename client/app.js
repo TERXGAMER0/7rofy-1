@@ -60,72 +60,6 @@ let partyInterval = null;
 // الوصول إلى عنصر الصوت
 const partySound = document.getElementById("partySound");
 
-// إعدادات النصوص الثابتة والروابط لتعديلها برمجياً
-const staticTextSettings = {
-  text1: { top: '10px', left: '10px', fontSize: '18px', width: '200px' },
-  text2: { top: '40px', left: '10px', fontSize: '18px', width: '200px' },
-  text3: { top: '70px', left: '10px', fontSize: '18px', width: '200px' }
-};
-
-const linkTextSettings = {
-  text1: { top: '100px', left: '10px', fontSize: '16px', width: '200px' },
-  text2: { top: '130px', left: '10px', fontSize: '16px', width: '200px' },
-  text3: { top: '160px', left: '10px', fontSize: '16px', width: '200px' }
-};
-
-function applyTextSettings() {
-  const st1 = document.getElementById('staticText1');
-  const st2 = document.getElementById('staticText2');
-  const st3 = document.getElementById('staticText3');
-  const lt1 = document.getElementById('linkText1');
-  const lt2 = document.getElementById('linkText2');
-  const lt3 = document.getElementById('linkText3');
-  
-  if(st1) {
-    st1.style.position = 'absolute';
-    st1.style.top = staticTextSettings.text1.top;
-    st1.style.left = staticTextSettings.text1.left;
-    st1.style.fontSize = staticTextSettings.text1.fontSize;
-    st1.style.width = staticTextSettings.text1.width;
-  }
-  if(st2) {
-    st2.style.position = 'absolute';
-    st2.style.top = staticTextSettings.text2.top;
-    st2.style.left = staticTextSettings.text2.left;
-    st2.style.fontSize = staticTextSettings.text2.fontSize;
-    st2.style.width = staticTextSettings.text2.width;
-  }
-  if(st3) {
-    st3.style.position = 'absolute';
-    st3.style.top = staticTextSettings.text3.top;
-    st3.style.left = staticTextSettings.text3.left;
-    st3.style.fontSize = staticTextSettings.text3.fontSize;
-    st3.style.width = staticTextSettings.text3.width;
-  }
-  
-  if(lt1) {
-    lt1.style.position = 'absolute';
-    lt1.style.top = linkTextSettings.text1.top;
-    lt1.style.left = linkTextSettings.text1.left;
-    lt1.style.fontSize = linkTextSettings.text1.fontSize;
-    lt1.style.width = linkTextSettings.text1.width;
-  }
-  if(lt2) {
-    lt2.style.position = 'absolute';
-    lt2.style.top = linkTextSettings.text2.top;
-    lt2.style.left = linkTextSettings.text2.left;
-    lt2.style.fontSize = linkTextSettings.text2.fontSize;
-    lt2.style.width = linkTextSettings.text2.width;
-  }
-  if(lt3) {
-    lt3.style.position = 'absolute';
-    lt3.style.top = linkTextSettings.text3.top;
-    lt3.style.left = linkTextSettings.text3.left;
-    lt3.style.fontSize = linkTextSettings.text3.fontSize;
-    lt3.style.width = linkTextSettings.text3.width;
-  }
-}
-
 function rgbToHex(rgb) {
   if (!rgb || rgb === "") return "#ffffe0";
   if (rgb.startsWith("#")) return rgb.toLowerCase();
@@ -365,15 +299,18 @@ function copyLetters() {
     });
 }
 
-document.getElementById("shuffleButton").addEventListener("click", shuffleLetters);
-document.getElementById("swapColorsButton").addEventListener("click", swapColors);
-document.getElementById("changeColorsButton").addEventListener("click", changeColorSet);
-document.getElementById("partyButton").addEventListener("click", partyMode);
-document.getElementById("copyLettersButton").addEventListener("click", copyLetters);
-document.getElementById("resizeSlider").addEventListener("input", function (e) {
-  const scale = e.target.value;
-  document.documentElement.style.setProperty("--scale", scale);
-});
+// إعدادات النصوص الثابتة والروابط
+const staticTextSettings = {
+  text1: { top: '10px', left: '10px', fontSize: '18px', width: '200px' },
+  text2: { top: '40px', left: '10px', fontSize: '18px', width: '200px' },
+  text3: { top: '70px', left: '10px', fontSize: '18px', width: '200px' }
+};
+
+const linkTextSettings = {
+  text1: { top: '100px', left: '10px', fontSize: '16px', width: '200px' },
+  text2: { top: '130px', left: '10px', fontSize: '16px', width: '200px' },
+  text3: { top: '160px', left: '10px', fontSize: '16px', width: '200px' }
+};
 
 function applyTextSettings() {
   const st1 = document.getElementById('staticText1');
@@ -427,19 +364,6 @@ function applyTextSettings() {
     lt3.style.width = linkTextSettings.text3.width;
   }
 }
-
-// إعدادات النصوص الثابتة والروابط
-const staticTextSettings = {
-  text1: { top: '10px', left: '10px', fontSize: '18px', width: '200px' },
-  text2: { top: '40px', left: '10px', fontSize: '18px', width: '200px' },
-  text3: { top: '70px', left: '10px', fontSize: '18px', width: '200px' }
-};
-
-const linkTextSettings = {
-  text1: { top: '100px', left: '10px', fontSize: '16px', width: '200px' },
-  text2: { top: '130px', left: '10px', fontSize: '16px', width: '200px' },
-  text3: { top: '160px', left: '10px', fontSize: '16px', width: '200px' }
-};
 
 window.onload = function () {
   createHexGrid();
