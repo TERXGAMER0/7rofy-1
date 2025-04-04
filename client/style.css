@@ -17,26 +17,28 @@
   background: #fff;
   padding: 20px;
   border-radius: 10px;
+  position: relative;
 }
 
-.secret-container h2 {
-  margin-bottom: 15px;
-  font-family: "Simplified Arabic";
+/* التنسيقات الخاصة بالنصوص الإضافية داخل واجهة التفعيل */
+#staticTexts, #linkTexts {
+  position: relative;
+  margin-top: 15px;
+  width: 100%;
+  text-align: center;
 }
 
-.secret-container input {
-  padding: 10px;
-  font-size: 16px;
-  width: 250px;
-  margin-bottom: 10px;
+.static-text, .link-text {
+  margin: 5px 0;
+  color: #000;
 }
 
-.secret-container button {
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
+.link-text a {
+  color: blue;
+  text-decoration: underline;
 }
 
+/* بقية التنسيقات كما هي */
 :root {
   --scale: 1; /* قيمة التحجيم الافتراضية */
 }
@@ -384,22 +386,4 @@
   .mobile-notice {
     display: block;
   }
-}
-
-/* أنماط النصوص الإضافية */
-.additional-text,
-.clickable-text {
-  position: absolute;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 5px 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-family: "Tahoma", sans-serif;
-  text-align: center;
-}
-
-.clickable-text {
-  color: blue;
-  text-decoration: underline;
-  cursor: pointer;
 }
