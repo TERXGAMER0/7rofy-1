@@ -308,7 +308,7 @@ const staticTextSettings = {
 };
 
 const linkTextSettings = {
-  text1: { top: "-80px", left: "-25px", fontSize: "16px", width: "200px" },
+  text1: { top: "-83px", left: "-25px", fontSize: "16px", width: "200px" },
   text2: { top: "130px", left: "10px", fontSize: "0px", width: "200px" },
   text3: { top: "160px", left: "10px", fontSize: "0px", width: "200px" },
 };
