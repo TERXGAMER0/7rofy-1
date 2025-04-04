@@ -5,15 +5,12 @@ dotenv.config();
 
 const app = express();
 
-// استخدام middleware لتحليل JSON
-app.use(express.json());
+// خدمة الملفات الثابتة من مجلد client
+app.use(express.static(path.join(__dirname, 'client')));
 
-// خدمة الملفات الثابتة من الجذر (يجب أن يكون a1.html، app.js، style.css في نفس المجلد أو مجلد ثابت محدد)
-app.use(express.static(__dirname));
-
-// عند الوصول إلى "/" إعادة ملف a1.html
+// عند الوصول إلى "/" إعادة ملف a1.html من داخل مجلد client
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'a1.html'));
+  res.sendFile(path.join(__dirname, 'client', 'a1.html'));
 });
 
 const PORT = process.env.PORT || 8080;
