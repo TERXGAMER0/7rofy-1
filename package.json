@@ -1,0 +1,13 @@
+{
+    "name": "7rofy",
+    "version": "1.0.0",
+    "description": "Express API for activation code verification and game",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server.js"
+    },
+    "dependencies": {
+      "dotenv": "^16.0.3",
+      "express": "^4.18.2"
+    }
+  }
