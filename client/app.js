@@ -302,13 +302,13 @@ function copyLetters() {
 
 // إعدادات النصوص الثابتة والروابط
 const staticTextSettings = {
-  text1: { top: "-130px", left: "-20px", fontSize: "18px", width: "200px" },
+  text1: { top: "-130px", left: "-20px", fontSize: "0px", width: "200px" },
   text2: { top: "40px", left: "10px", fontSize: "0px", width: "200px" },
   text3: { top: "70px", left: "10px", fontSize: "0px", width: "200px" },
 };
 
 const linkTextSettings = {
-  text1: { top: "-83px", left: "-25px", fontSize: "16px", width: "200px" },
+  text1: { top: "-83px", left: "-25px", fontSize: "0px", width: "200px" },
   text2: { top: "130px", left: "10px", fontSize: "0px", width: "200px" },
   text3: { top: "160px", left: "10px", fontSize: "0px", width: "200px" },
 };
