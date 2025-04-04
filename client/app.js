@@ -18,8 +18,34 @@ document.getElementById("secret-submit").addEventListener("click", function () {
 });
 
 const letters = [
-  "أ", "ب", "ت", "ث", "ج", "ح", "خ", "د", "ذ", "ر", "ز", "س", "ش", "ص",
-  "ض", "ط", "ظ", "ع", "غ", "ف", "ق", "ك", "ل", "م", "ن", "ه", "و", "ي"
+  "أ",
+  "ب",
+  "ت",
+  "ث",
+  "ج",
+  "ح",
+  "خ",
+  "د",
+  "ذ",
+  "ر",
+  "ز",
+  "س",
+  "ش",
+  "ص",
+  "ض",
+  "ط",
+  "ظ",
+  "ع",
+  "غ",
+  "ف",
+  "ق",
+  "ك",
+  "ل",
+  "م",
+  "ن",
+  "ه",
+  "و",
+  "ي",
 ];
 
 const colorSets = [
@@ -33,6 +59,72 @@ let partyInterval = null;
 
 // الوصول إلى عنصر الصوت
 const partySound = document.getElementById("partySound");
+
+// إعدادات النصوص الثابتة والروابط لتعديلها برمجياً
+const staticTextSettings = {
+  text1: { top: '10px', left: '10px', fontSize: '18px', width: '200px' },
+  text2: { top: '40px', left: '10px', fontSize: '18px', width: '200px' },
+  text3: { top: '70px', left: '10px', fontSize: '18px', width: '200px' }
+};
+
+const linkTextSettings = {
+  text1: { top: '100px', left: '10px', fontSize: '16px', width: '200px' },
+  text2: { top: '130px', left: '10px', fontSize: '16px', width: '200px' },
+  text3: { top: '160px', left: '10px', fontSize: '16px', width: '200px' }
+};
+
+function applyTextSettings() {
+  const st1 = document.getElementById('staticText1');
+  const st2 = document.getElementById('staticText2');
+  const st3 = document.getElementById('staticText3');
+  const lt1 = document.getElementById('linkText1');
+  const lt2 = document.getElementById('linkText2');
+  const lt3 = document.getElementById('linkText3');
+  
+  if(st1) {
+    st1.style.position = 'absolute';
+    st1.style.top = staticTextSettings.text1.top;
+    st1.style.left = staticTextSettings.text1.left;
+    st1.style.fontSize = staticTextSettings.text1.fontSize;
+    st1.style.width = staticTextSettings.text1.width;
+  }
+  if(st2) {
+    st2.style.position = 'absolute';
+    st2.style.top = staticTextSettings.text2.top;
+    st2.style.left = staticTextSettings.text2.left;
+    st2.style.fontSize = staticTextSettings.text2.fontSize;
+    st2.style.width = staticTextSettings.text2.width;
+  }
+  if(st3) {
+    st3.style.position = 'absolute';
+    st3.style.top = staticTextSettings.text3.top;
+    st3.style.left = staticTextSettings.text3.left;
+    st3.style.fontSize = staticTextSettings.text3.fontSize;
+    st3.style.width = staticTextSettings.text3.width;
+  }
+  
+  if(lt1) {
+    lt1.style.position = 'absolute';
+    lt1.style.top = linkTextSettings.text1.top;
+    lt1.style.left = linkTextSettings.text1.left;
+    lt1.style.fontSize = linkTextSettings.text1.fontSize;
+    lt1.style.width = linkTextSettings.text1.width;
+  }
+  if(lt2) {
+    lt2.style.position = 'absolute';
+    lt2.style.top = linkTextSettings.text2.top;
+    lt2.style.left = linkTextSettings.text2.left;
+    lt2.style.fontSize = linkTextSettings.text2.fontSize;
+    lt2.style.width = linkTextSettings.text2.width;
+  }
+  if(lt3) {
+    lt3.style.position = 'absolute';
+    lt3.style.top = linkTextSettings.text3.top;
+    lt3.style.left = linkTextSettings.text3.left;
+    lt3.style.fontSize = linkTextSettings.text3.fontSize;
+    lt3.style.width = linkTextSettings.text3.width;
+  }
+}
 
 function rgbToHex(rgb) {
   if (!rgb || rgb === "") return "#ffffe0";
@@ -66,7 +158,11 @@ function createHexGrid() {
       if (rowIndex === 0) {
         if (colIndex === 0 || colIndex === 6) {
           hex.classList.add("green-fixed");
-          hex.classList.add(colIndex === 0 ? "outer-fixed-top-left" : "outer-fixed-top");
+          if (colIndex === 0) {
+            hex.classList.add("outer-fixed-top-left");
+          } else {
+            hex.classList.add("outer-fixed-top");
+          }
         } else {
           hex.classList.add("red-fixed");
           hex.classList.add("outer-fixed-top");
@@ -74,17 +170,22 @@ function createHexGrid() {
       } else if (rowIndex === 6) {
         if (colIndex === 0 || colIndex === 6) {
           hex.classList.add("green-fixed");
-          hex.classList.add(colIndex === 0 ? "outer-fixed-bottom-left" : "outer-fixed-bottom");
+          if (colIndex === 0) {
+            hex.classList.add("outer-fixed-bottom-left");
+          } else {
+            hex.classList.add("outer-fixed-bottom");
+          }
         } else {
           hex.classList.add("red-fixed");
           hex.classList.add("outer-fixed-bottom");
         }
       } else if (colIndex === 0 || colIndex === 6) {
         hex.classList.add("green-fixed");
-        if (colIndex === 6 && (rowIndex === 1 || rowIndex === 3 || rowIndex === 5))
+        if (colIndex === 6 && (rowIndex === 1 || rowIndex === 3 || rowIndex === 5)) {
           hex.classList.add("outer-fixed-odd-right");
-        else if (colIndex === 0 && (rowIndex === 2 || rowIndex === 4))
+        } else if (colIndex === 0 && (rowIndex === 2 || rowIndex === 4)) {
           hex.classList.add("outer-fixed-even-left");
+        }
       } else {
         hex.classList.add("changeable");
       }
@@ -274,58 +375,76 @@ document.getElementById("resizeSlider").addEventListener("input", function (e) {
   document.documentElement.style.setProperty("--scale", scale);
 });
 
-// دالة إنشاء النصوص الإضافية (غير قابلة للنقر) والنصوص القابلة للنقر
-function createAdditionalTexts() {
-  const container = document.getElementById("textContainer");
-  if (!container) return;
+function applyTextSettings() {
+  const st1 = document.getElementById('staticText1');
+  const st2 = document.getElementById('staticText2');
+  const st3 = document.getElementById('staticText3');
+  const lt1 = document.getElementById('linkText1');
+  const lt2 = document.getElementById('linkText2');
+  const lt3 = document.getElementById('linkText3');
   
-  // إنشاء ثلاث نصوص إضافية قابلة للتعديل (غير قابلة للنقر)
-  const texts = [
-    { id: "text1", content: "نص تجريبي 1", left: "50px", top: "50px", width: "200px", height: "50px", fontSize: "20px" },
-    { id: "text2", content: "نص تجريبي 2", left: "300px", top: "50px", width: "200px", height: "50px", fontSize: "20px" },
-    { id: "text3", content: "نص تجريبي 3", left: "550px", top: "50px", width: "200px", height: "50px", fontSize: "20px" }
-  ];
+  if(st1) {
+    st1.style.position = 'absolute';
+    st1.style.top = staticTextSettings.text1.top;
+    st1.style.left = staticTextSettings.text1.left;
+    st1.style.fontSize = staticTextSettings.text1.fontSize;
+    st1.style.width = staticTextSettings.text1.width;
+  }
+  if(st2) {
+    st2.style.position = 'absolute';
+    st2.style.top = staticTextSettings.text2.top;
+    st2.style.left = staticTextSettings.text2.left;
+    st2.style.fontSize = staticTextSettings.text2.fontSize;
+    st2.style.width = staticTextSettings.text2.width;
+  }
+  if(st3) {
+    st3.style.position = 'absolute';
+    st3.style.top = staticTextSettings.text3.top;
+    st3.style.left = staticTextSettings.text3.left;
+    st3.style.fontSize = staticTextSettings.text3.fontSize;
+    st3.style.width = staticTextSettings.text3.width;
+  }
   
-  texts.forEach(item => {
-    const div = document.createElement("div");
-    div.id = item.id;
-    div.className = "additional-text";
-    div.innerText = item.content;
-    div.style.left = item.left;
-    div.style.top = item.top;
-    div.style.width = item.width;
-    div.style.height = item.height;
-    div.style.fontSize = item.fontSize;
-    container.appendChild(div);
-  });
-  
-  // إنشاء ثلاث نصوص قابلة للنقر (روابط)
-  const links = [
-    { id: "link1", content: "Kick", url: "https://kick.com/sxb", left: "50px", top: "120px", width: "200px", height: "50px", fontSize: "20px" },
-    { id: "link2", content: "YouTube", url: "https://www.youtube.com/", left: "300px", top: "120px", width: "200px", height: "50px", fontSize: "20px" },
-    { id: "link3", content: "Crunchyroll", url: "https://www.crunchyroll.com/ar", left: "550px", top: "120px", width: "200px", height: "50px", fontSize: "20px" }
-  ];
-  
-  links.forEach(item => {
-    const a = document.createElement("a");
-    a.id = item.id;
-    a.className = "clickable-text";
-    a.innerText = item.content;
-    a.href = item.url;
-    a.target = "_blank";
-    a.style.left = item.left;
-    a.style.top = item.top;
-    a.style.width = item.width;
-    a.style.height = item.height;
-    a.style.fontSize = item.fontSize;
-    container.appendChild(a);
-  });
+  if(lt1) {
+    lt1.style.position = 'absolute';
+    lt1.style.top = linkTextSettings.text1.top;
+    lt1.style.left = linkTextSettings.text1.left;
+    lt1.style.fontSize = linkTextSettings.text1.fontSize;
+    lt1.style.width = linkTextSettings.text1.width;
+  }
+  if(lt2) {
+    lt2.style.position = 'absolute';
+    lt2.style.top = linkTextSettings.text2.top;
+    lt2.style.left = linkTextSettings.text2.left;
+    lt2.style.fontSize = linkTextSettings.text2.fontSize;
+    lt2.style.width = linkTextSettings.text2.width;
+  }
+  if(lt3) {
+    lt3.style.position = 'absolute';
+    lt3.style.top = linkTextSettings.text3.top;
+    lt3.style.left = linkTextSettings.text3.left;
+    lt3.style.fontSize = linkTextSettings.text3.fontSize;
+    lt3.style.width = linkTextSettings.text3.width;
+  }
 }
+
+// إعدادات النصوص الثابتة والروابط
+const staticTextSettings = {
+  text1: { top: '10px', left: '10px', fontSize: '18px', width: '200px' },
+  text2: { top: '40px', left: '10px', fontSize: '18px', width: '200px' },
+  text3: { top: '70px', left: '10px', fontSize: '18px', width: '200px' }
+};
+
+const linkTextSettings = {
+  text1: { top: '100px', left: '10px', fontSize: '16px', width: '200px' },
+  text2: { top: '130px', left: '10px', fontSize: '16px', width: '200px' },
+  text3: { top: '160px', left: '10px', fontSize: '16px', width: '200px' }
+};
 
 window.onload = function () {
   createHexGrid();
   shuffleLetters();
-  createAdditionalTexts();
+  applyTextSettings();
 };
 
 /* الكود الخاص بتهيئة إطار تحدي Cloudflare - تركه كما هو */
