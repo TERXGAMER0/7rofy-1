@@ -264,16 +264,26 @@ function copyLetters() {
     });
 }
 
-// دالة إنشاء النصوص الإضافية
+document.getElementById("shuffleButton").addEventListener("click", shuffleLetters);
+document.getElementById("swapColorsButton").addEventListener("click", swapColors);
+document.getElementById("changeColorsButton").addEventListener("click", changeColorSet);
+document.getElementById("partyButton").addEventListener("click", partyMode);
+document.getElementById("copyLettersButton").addEventListener("click", copyLetters);
+document.getElementById("resizeSlider").addEventListener("input", function (e) {
+  const scale = e.target.value;
+  document.documentElement.style.setProperty("--scale", scale);
+});
+
+// دالة إنشاء النصوص الإضافية (غير قابلة للنقر) والنصوص القابلة للنقر
 function createAdditionalTexts() {
   const container = document.getElementById("textContainer");
   if (!container) return;
   
-  // إنشاء ثلاث نصوص إضافية (عادية) مع إعدادات مستقلة
+  // إنشاء ثلاث نصوص إضافية قابلة للتعديل (غير قابلة للنقر)
   const texts = [
-    { id: "text1", content: "نص تجريبي 1", left: "50px", top: "10px", width: "200px", height: "50px", fontSize: "20px" },
-    { id: "text2", content: "نص تجريبي 2", left: "300px", top: "10px", width: "200px", height: "50px", fontSize: "20px" },
-    { id: "text3", content: "نص تجريبي 3", left: "550px", top: "10px", width: "200px", height: "50px", fontSize: "20px" }
+    { id: "text1", content: "نص تجريبي 1", left: "50px", top: "50px", width: "200px", height: "50px", fontSize: "20px" },
+    { id: "text2", content: "نص تجريبي 2", left: "300px", top: "50px", width: "200px", height: "50px", fontSize: "20px" },
+    { id: "text3", content: "نص تجريبي 3", left: "550px", top: "50px", width: "200px", height: "50px", fontSize: "20px" }
   ];
   
   texts.forEach(item => {
@@ -289,11 +299,11 @@ function createAdditionalTexts() {
     container.appendChild(div);
   });
   
-  // إنشاء ثلاث نصوص قابلة للنقر (روابط) مع إعدادات مستقلة
+  // إنشاء ثلاث نصوص قابلة للنقر (روابط)
   const links = [
-    { id: "link1", content: "Kick", url: "https://kick.com/sxb", left: "50px", top: "70px", width: "200px", height: "50px", fontSize: "20px" },
-    { id: "link2", content: "YouTube", url: "https://www.youtube.com/", left: "300px", top: "70px", width: "200px", height: "50px", fontSize: "20px" },
-    { id: "link3", content: "Crunchyroll", url: "https://www.crunchyroll.com/ar", left: "550px", top: "70px", width: "200px", height: "50px", fontSize: "20px" }
+    { id: "link1", content: "Kick", url: "https://kick.com/sxb", left: "50px", top: "120px", width: "200px", height: "50px", fontSize: "20px" },
+    { id: "link2", content: "YouTube", url: "https://www.youtube.com/", left: "300px", top: "120px", width: "200px", height: "50px", fontSize: "20px" },
+    { id: "link3", content: "Crunchyroll", url: "https://www.crunchyroll.com/ar", left: "550px", top: "120px", width: "200px", height: "50px", fontSize: "20px" }
   ];
   
   links.forEach(item => {
