@@ -1,20 +1,20 @@
 // التحقق من الرمز السري عبر استدعاء API من الخادم
 document.getElementById("secret-submit").addEventListener("click", function () {
   var code = document.getElementById("secret-code").value.trim();
-  fetch('/api/verify', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ code: code })
+  fetch("/api/verify", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ code: code }),
   })
-    .then(response => response.json())
-    .then(data => {
+    .then((response) => response.json())
+    .then((data) => {
       if (data.valid) {
         document.getElementById("secret-overlay").style.display = "none";
       } else {
         document.getElementById("error-message").style.display = "block";
       }
     })
-    .catch(err => console.error("Error during verification:", err));
+    .catch((err) => console.error("Error during verification:", err));
 });
 
 const letters = [
@@ -115,7 +115,10 @@ function createHexGrid() {
         }
       } else if (colIndex === 0 || colIndex === 6) {
         hex.classList.add("green-fixed");
-        if (colIndex === 6 && (rowIndex === 1 || rowIndex === 3 || rowIndex === 5)) {
+        if (
+          colIndex === 6 &&
+          (rowIndex === 1 || rowIndex === 3 || rowIndex === 5)
+        ) {
           hex.classList.add("outer-fixed-odd-right");
         } else if (colIndex === 0 && (rowIndex === 2 || rowIndex === 4)) {
           hex.classList.add("outer-fixed-even-left");
@@ -223,9 +226,7 @@ function partyMode() {
 
   // تشغيل الصوت
   partySound.currentTime = 0;
-  partySound
-    .play()
-    .catch((err) => console.error("فشل تشغيل الصوت:", err));
+  partySound.play().catch((err) => console.error("فشل تشغيل الصوت:", err));
 
   partyText.style.display = "block";
   body.classList.add("active");
@@ -301,63 +302,63 @@ function copyLetters() {
 
 // إعدادات النصوص الثابتة والروابط
 const staticTextSettings = {
-  text1: { top: '10px', left: '10px', fontSize: '18px', width: '200px' },
-  text2: { top: '40px', left: '10px', fontSize: '18px', width: '200px' },
-  text3: { top: '70px', left: '10px', fontSize: '18px', width: '200px' }
+  text1: { top: "-130px", left: "-20px", fontSize: "18px", width: "200px" },
+  text2: { top: "40px", left: "10px", fontSize: "0px", width: "200px" },
+  text3: { top: "70px", left: "10px", fontSize: "0px", width: "200px" },
 };
 
 const linkTextSettings = {
-  text1: { top: '100px', left: '10px', fontSize: '16px', width: '200px' },
-  text2: { top: '130px', left: '10px', fontSize: '16px', width: '200px' },
-  text3: { top: '160px', left: '10px', fontSize: '16px', width: '200px' }
+  text1: { top: "-80px", left: "-25px", fontSize: "16px", width: "200px" },
+  text2: { top: "130px", left: "10px", fontSize: "0px", width: "200px" },
+  text3: { top: "160px", left: "10px", fontSize: "0px", width: "200px" },
 };
 
 function applyTextSettings() {
-  const st1 = document.getElementById('staticText1');
-  const st2 = document.getElementById('staticText2');
-  const st3 = document.getElementById('staticText3');
-  const lt1 = document.getElementById('linkText1');
-  const lt2 = document.getElementById('linkText2');
-  const lt3 = document.getElementById('linkText3');
-  
-  if(st1) {
-    st1.style.position = 'absolute';
+  const st1 = document.getElementById("staticText1");
+  const st2 = document.getElementById("staticText2");
+  const st3 = document.getElementById("staticText3");
+  const lt1 = document.getElementById("linkText1");
+  const lt2 = document.getElementById("linkText2");
+  const lt3 = document.getElementById("linkText3");
+
+  if (st1) {
+    st1.style.position = "absolute";
     st1.style.top = staticTextSettings.text1.top;
     st1.style.left = staticTextSettings.text1.left;
     st1.style.fontSize = staticTextSettings.text1.fontSize;
     st1.style.width = staticTextSettings.text1.width;
   }
-  if(st2) {
-    st2.style.position = 'absolute';
+  if (st2) {
+    st2.style.position = "absolute";
     st2.style.top = staticTextSettings.text2.top;
     st2.style.left = staticTextSettings.text2.left;
     st2.style.fontSize = staticTextSettings.text2.fontSize;
     st2.style.width = staticTextSettings.text2.width;
   }
-  if(st3) {
-    st3.style.position = 'absolute';
+  if (st3) {
+    st3.style.position = "absolute";
     st3.style.top = staticTextSettings.text3.top;
     st3.style.left = staticTextSettings.text3.left;
     st3.style.fontSize = staticTextSettings.text3.fontSize;
     st3.style.width = staticTextSettings.text3.width;
   }
-  
-  if(lt1) {
-    lt1.style.position = 'absolute';
+
+  if (lt1) {
+    lt1.style.position = "absolute";
     lt1.style.top = linkTextSettings.text1.top;
     lt1.style.left = linkTextSettings.text1.left;
     lt1.style.fontSize = linkTextSettings.text1.fontSize;
     lt1.style.width = linkTextSettings.text1.width;
   }
-  if(lt2) {
-    lt2.style.position = 'absolute';
+  if (lt2) {
+    lt2.style.position = "absolute";
     lt2.style.top = linkTextSettings.text2.top;
     lt2.style.left = linkTextSettings.text2.left;
     lt2.style.fontSize = linkTextSettings.text2.fontSize;
     lt2.style.width = linkTextSettings.text2.width;
   }
-  if(lt3) {
-    lt3.style.position = 'absolute';
+  if (lt3) {
+    lt3.style.position = "absolute";
     lt3.style.top = linkTextSettings.text3.top;
     lt3.style.left = linkTextSettings.text3.left;
     lt3.style.fontSize = linkTextSettings.text3.fontSize;
