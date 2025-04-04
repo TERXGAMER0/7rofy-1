@@ -1,5 +1,5 @@
 {
-    "name": "7rofy",
+    "name": "7rofy-1",
     "version": "1.0.0",
     "description": "Express API for activation code verification and game",
     "main": "server.js",
