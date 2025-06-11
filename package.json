@@ -1,5 +1,9 @@
 {
-  "name": "7rofy-2-netlify",
+  "name": "7rofy-1",
   "version": "1.0.0",
+  "description": "لعبة حروف مع حماية رمز تفعيل عبر Netlify Functions",
+  "scripts": {
+    "start": "netlify dev"
+  },
   "dependencies": {}
 }
