@@ -1,0 +1,6 @@
+[build]
+  publish = "."            # مجلد النشر هو جذر المشروع
+  functions = "netlify/functions"  # مجلد الدوال
+
+[dev]
+  functions = "netlify/functions"
