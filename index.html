@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>لعبة حروف</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <!-- ربط ملف التنسيقات الخارجي -->
+    <link rel="stylesheet" href="style.css" />
+    <!-- (اختياري) أيقونة الموقع -->
+    <!-- <link rel="icon" href="logo.ico" /> -->
+  </head>
+  <body>
+    <!-- واجهة التحقق من الرمز السري -->
+    <div id="secret-overlay">
+      <div class="secret-container">
+        <h2>أدخل رمز التفعيل المجاني للدخول</h2>
+        <input type="text" id="secret-code" placeholder="الرمز السري" />
+        <br />
+        <button id="secret-submit">ادخال</button>
+        <p id="error-message" style="color: red; display: none">
+          رمز خاطئ، حاول مرة أخرى
+        </p>
+        <p style="font-size: 17px; margin-top: 10px">
+          اذا لم يكن لديك رمز تفعيل ، يمكنك الحصول عليه مجانًا في بوت التيليجرام؛
+          <a href="https://t.me/ii40TSM_bot" target="_blank">اضغط هنا</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- المحتوى الرئيسي للعبة -->
+    <div class="container">
+      <div class="banner" id="gridBanner"></div>
+      <div class="mobile-notice">
+        لتظهر الأشكال السداسية بشكل أفضل، قم بتدوير الجوال
+      </div>
+      <div class="hex-grid" id="hexGrid"></div>
+      <div class="party-text" id="partyText">مبروك</div>
+      <div class="icon-container">
+        <!-- أزرار التحكم -->
+        <button id="shuffleButton" class="icon-btn" title="خلط الحروف">
+          <i class="fas fa-random"></i>
+        </button>
+        <button id="swapColorsButton" class="icon-btn" title="عكس">
+          <i class="fas fa-exchange-alt"></i>
+        </button>
+        <button id="changeColorsButton" class="icon-btn" title="تغيير الألوان">
+          <i class="fas fa-palette"></i>
+        </button>
+        <button id="partyButton" class="icon-btn party-btn" title="بارتي">
+          🎉
+        </button>
+        <input
+          type="range"
+          id="resizeSlider"
+          min="0.25"
+          max="1.5"
+          step="0.1"
+          value="1"
+          title="تكبير/تصغير"
+        />
+      </div>
+      <button id="copyLettersButton" class="copy-btn" title="نسخ الحروف">
+        <i class="fas fa-copy"></i>
+      </button>
+      <!-- نجوم ووميض -->
+      <div class="sparkle" style="left: 15%; top: 25%"></div>
+      <div class="sparkle" style="left: 35%; top: 45%"></div>
+      <div class="sparkle" style="left: 55%; top: 15%"></div>
+      <div class="sparkle" style="left: 75%; top: 35%"></div>
+      <div class="sparkle" style="left: 25%; top: 65%"></div>
+      <div class="flash"></div>
+      <audio id="partySound" src="party.mp3" preload="auto"></audio>
+    </div>
+
+    <!-- ربط ملف الجافاسكريبت الخارجي بعد التعديل -->
+    <script src="app.js"></script>
+  </body>
+</html>
