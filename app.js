@@ -66,8 +66,8 @@ function createHexGrid() {
         const isCorner = (colIndex === 0 || colIndex === 6);
         hex.classList.add(isCorner ? "green-fixed" : "red-fixed");
         hex.classList.add(rowIndex === 0
-          ? (isCorner ? "outer-fixed-top-left" : "outer-fixed-top")
-          : (isCorner ? "outer-fixed-bottom-left" : "outer-fixed-bottom")
+          ? (isCorner ? "outer-fixed-top" : "outer-fixed-top")
+          : (isCorner ? "outer-fixed-bottom" : "outer-fixed-bottom")
         );
       } else if (colIndex === 0 || colIndex === 6) {
         // أعمدة اليمين واليسار وسطياً
