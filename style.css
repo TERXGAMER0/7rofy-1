@@ -127,6 +127,10 @@
   background-color: #ffffe0;
 }
 
+.hexagon:hover {
+  /* تم إزالة transform: scale(1.05); */
+}
+
 .hexagon::before {
   content: "";
   position: absolute;
