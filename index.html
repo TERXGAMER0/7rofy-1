@@ -1,629 +1,610 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة حروف</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        /* ========== تصميم الواجهة الأمنية ========== */
-        #secret-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(75, 0, 130, 0.9); /* بنفسجي غامق */
-            z-index: 10000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .secret-container {
-            text-align: center;
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-        }
-        .secret-container h2 {
-            margin-bottom: 15px;
-            font-family: 'Simplified Arabic';
-        }
-        .secret-container input {
-            padding: 10px;
-            font-size: 16px;
-            width: 250px;
-            margin-bottom: 10px;
-        }
-        .secret-container button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لعبة حروف</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+/* ========== تصميم الواجهة الأمنية ========== */
+#secret-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(75, 0, 130, 0.9); /* بنفسجي غامق */
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-        :root {
-            --scale: 1; /* قيمة التحجيم الافتراضية */
-        }
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
-            flex-direction: column;
-            padding: 10px;
-            width: 100%;
-            box-sizing: border-box;
-            position: relative;
-            overflow: hidden;
-        }
-        .banner {
-            width: 100%;
-            max-width: 600px;
-            padding: 15px;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            font-size: 24px;
-            font-family: 'Tahoma', sans-serif;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            display: none;
-        }
-        .hex-grid {
-            padding: 0;
-            background: #000000;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            max-width: 100%;
-            margin: 0 auto;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .row {
-            display: flex;
-            gap: 2px;
-            justify-content: center;
-            transition: margin 0.3s ease;
-        }
-        .row:nth-child(even) {
-            margin-left: calc(42px * var(--scale));
-        }
-        .row:nth-child(odd) {
-            margin-right: calc(42px * var(--scale));
-        }
-        .row:not(:first-child) {
-            margin-top: calc(-20px * var(--scale));
-        }
-        .hexagon {
-            width: calc(80px * var(--scale));
-            height: calc(92px * var(--scale));
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: calc(28px * var(--scale));
-            font-family: 'Tahoma', sans-serif;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s, width 0.3s ease, height 0.3s ease, font-size 0.3s ease;
-            position: relative;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            background-color: #ffffe0;
-        }
-        .hexagon:hover {
-            /* تم إزالة transform: scale(1.05); */
-        }
-        .hexagon::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: inherit;
-            clip-path: inherit;
-            transform: scale(1.05);
-            z-index: -1;
-        }
-        .hexagon.fade {
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        .hexagon.color-transition {
-            transition: background-color 0.1s ease;
-        }
-        @keyframes fadeIn {
-            0% { opacity: 0; transform: scale(0.9); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-        .red-fixed {
-            background-color: #ff4081;
-            cursor: default;
-        }
-        .green-fixed {
-            background-color: #81c784;
-            cursor: default;
-        }
-        .outer-fixed-odd-right {
-            clip-path: polygon(0% 25%, 50% 0%, 50% 100%, 0% 75%, 0% 25%);
-        }
-        .outer-fixed-even-left {
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 50% 0%);
-        }
-        .outer-fixed-top {
-            clip-path: polygon(0% 25%, 100% 25%, 100% 75%, 50% 100%, 0% 75%);
-        }
-        .outer-fixed-bottom {
-            clip-path: polygon(0% 25%, 50% 0%, 100% 25%, 100% 75%, 0% 75%);
-        }
-        .outer-fixed-top-left {
-            clip-path: polygon(50% 25%, 100% 25%, 100% 75%, 50% 100%, 50% 75%);
-        }
-        .outer-fixed-bottom-left {
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 75%, 50% 25%);
-        }
-        .icon-container {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-        .icon-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-            cursor: pointer;
-            transition: transform 0.3s, background-color 0.3s;
-        }
-        .icon-btn:hover {
-            background-color: #0056b3;
-            transform: scale(1.1);
-        }
-        .party-btn {
-            font-size: 28px;
-        }
-        .copy-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-            cursor: pointer;
-            transition: transform 0.3s, background-color 0.3s;
-        }
-        .copy-btn:hover {
-            background-color: #0056b3;
-            transform: scale(1.1);
-        }
-        #resizeSlider {
-            width: 100px;
-            height: 10px;
-            -webkit-appearance: none;
-            appearance: none;
-            background: #007bff;
-            border-radius: 5px;
-            outline: none;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        #resizeSlider:hover {
-            background: #0056b3;
-        }
-        #resizeSlider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            background: #fff;
-            border-radius: 50%;
-            border: 2px solid #007bff;
-            cursor: pointer;
-        }
-        #resizeSlider::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            background: #fff;
-            border-radius: 50%;
-            border: 2px solid #007bff;
-            cursor: pointer;
-        }
-        .party-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 120px;
-            font-family: 'Tahoma', sans-serif;
-            font-weight: bold;
-            color: #ffd700;
-            text-shadow: 2px 2px 5px #ff4500;
-            display: none;
-            z-index: 10;
-            animation: pulse 0.8s infinite alternate;
-            -webkit-text-stroke: 2px #000000;
-            text-stroke: 2px #000000;
-        }
-        @keyframes pulse {
-            0% { transform: translate(-50%, -50%) scale(1); }
-            100% { transform: translate(-50%, -50%) scale(1.2); }
-        }
-        .sparkle {
-            position: fixed;
-            width: 5px;
-            height: 5px;
-            background-color: #fff;
-            animation: sparkle 2s infinite;
-            display: none;
-            border-radius: 50%;
-        }
-        @keyframes sparkle {
-            0% { opacity: 0; transform: scale(0); }
-            50% { opacity: 1; transform: scale(1.5); }
-            100% { opacity: 0; transform: scale(0); }
-        }
-        .active .sparkle {
-            display: block;
-        }
-        .flash {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 215, 0, 0.3);
-            opacity: 0;
-            animation: flash 0.5s infinite;
-            display: none;
-        }
-        @keyframes flash {
-            0% { opacity: 0; }
-            50% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-        .active .flash {
-            display: block;
-        }
-        .mobile-notice {
-            display: none;
-            background-color: #fff3cd;
-            color: #856404;
-            padding: 10px;
-            text-align: center;
-            font-family: 'Tahoma', sans-serif;
-            font-size: 16px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        @media (max-width: 768px) {
-            .mobile-notice {
-                display: block;
-            }
-        }
-    </style>
+.secret-container {
+  text-align: center;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.secret-container h2 {
+  margin-bottom: 15px;
+  font-family: "Simplified Arabic";
+}
+
+.secret-container input {
+  padding: 10px;
+  font-size: 16px;
+  width: 250px;
+  margin-bottom: 10px;
+}
+
+.secret-container button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* ========== تصميم اللعبة ========== */
+:root {
+  --scale: 1; /* قيمة التحجيم الافتراضية */
+}
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+  flex-direction: column;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+.banner {
+  width: 100%;
+  max-width: 600px;
+  padding: 15px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  font-size: 24px;
+  font-family: 'Tahoma', sans-serif;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: none;
+}
+.hex-grid {
+  padding: 0;
+  background: #000000;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  max-width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.row {
+  display: flex;
+  gap: 2px;
+  justify-content: center;
+  transition: margin 0.3s ease;
+}
+.row:nth-child(even) {
+  margin-left: calc(42px * var(--scale));
+}
+.row:nth-child(odd) {
+  margin-right: calc(42px * var(--scale));
+}
+.row:not(:first-child) {
+  margin-top: calc(-20px * var(--scale));
+}
+.hexagon {
+  width: calc(80px * var(--scale));
+  height: calc(92px * var(--scale));
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: calc(28px * var(--scale));
+  font-family: 'Tahoma', sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, width 0.3s ease, height 0.3s ease, font-size 0.3s ease;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  background-color: #ffffe0;
+}
+.hexagon:hover {
+  /* تم إزالة transform: scale(1.05); */
+}
+.hexagon::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  clip-path: inherit;
+  transform: scale(1.05);
+  z-index: -1;
+}
+.hexagon.fade {
+  animation: fadeIn 0.5s ease-in-out;
+}
+.hexagon.color-transition {
+  transition: background-color 0.1s ease;
+}
+@keyframes fadeIn {
+  0% { opacity: 0; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.red-fixed {
+  background-color: #ff4081;
+  cursor: default;
+}
+.green-fixed {
+  background-color: #81c784;
+  cursor: default;
+}
+.outer-fixed-odd-right {
+  clip-path: polygon(0% 25%, 50% 0%, 50% 100%, 0% 75%, 0% 25%);
+}
+.outer-fixed-even-left {
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 50% 0%);
+}
+.outer-fixed-top {
+  clip-path: polygon(0% 25%, 100% 25%, 100% 75%, 50% 100%, 0% 75%);
+}
+.outer-fixed-bottom {
+  clip-path: polygon(0% 25%, 50% 0%, 100% 25%, 100% 75%, 0% 75%);
+}
+.outer-fixed-top-left {
+  clip-path: polygon(50% 25%, 100% 25%, 100% 75%, 50% 100%, 50% 75%);
+}
+.outer-fixed-bottom-left {
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 75%, 50% 25%);
+}
+.icon-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.icon-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.3s, background-color 0.3s;
+}
+.icon-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.1);
+}
+.party-btn {
+  font-size: 28px;
+}
+.copy-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.3s, background-color 0.3s;
+}
+.copy-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.1);
+}
+#resizeSlider {
+  width: 100px;
+  height: 10px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #007bff;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+#resizeSlider:hover {
+  background: #0056b3;
+}
+#resizeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border-radius: 50%;
+  border: 2px solid #007bff;
+  cursor: pointer;
+}
+#resizeSlider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border-radius: 50%;
+  border: 2px solid #007bff;
+  cursor: pointer;
+}
+.party-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 120px;
+  font-family: 'Tahoma', sans-serif;
+  font-weight: bold;
+  color: #ffd700;
+  text-shadow: 2px 2px 5px #ff4500;
+  display: none;
+  z-index: 10;
+  animation: pulse 0.8s infinite alternate;
+  -webkit-text-stroke: 2px #000000;
+  text-stroke: 2px #000000;
+}
+@keyframes pulse {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  100% { transform: translate(-50%, -50%) scale(1.2); }
+}
+.sparkle {
+  position: fixed;
+  width: 5px;
+  height: 5px;
+  background-color: #fff;
+  animation: sparkle 2s infinite;
+  display: none;
+  border-radius: 50%;
+}
+@keyframes sparkle {
+  0% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1.5); }
+  100% { opacity: 0; transform: scale(0); }
+}
+.active .sparkle {
+  display: block;
+}
+.flash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 215, 0, 0.3);
+  opacity: 0;
+  animation: flash 0.5s infinite;
+  display: none;
+}
+@keyframes flash {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+.active .flash {
+  display: block;
+}
+.mobile-notice {
+  display: none;
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 10px;
+  text-align: center;
+  font-family: 'Tahoma', sans-serif;
+  font-size: 16px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+@media (max-width: 768px) { .mobile-notice { display: block; } }
+  </style>
 </head>
 <body>
 
-    <!-- واجهة التحقق من الرمز السري -->
-    <div id="secret-overlay">
-        <div class="secret-container">
-            <h2>أدخل رمز التفعيل المجاني للدخول</h2>
-            <input type="text" id="secret-code" placeholder="الرمز السري">
-            <br>
-            <button id="secret-submit">ادخال</button>
-            <p id="error-message" style="color: red; display: none;">رمز خاطئ، حاول مرة أخرى</p>
-            <p style="font-size: 17px; margin-top: 10px;">
-                اذا لم يكن لديك رمز تفعيل ، يمكنك الحصول عليه مجانًا في بوت التيليجرام؛
-                <a href="https://t.me/ii40TSM_bot" target="_blank">اضغط هنا</a>
-            </p>
-        </div>
+  <!-- واجهة التفعيل -->
+  <div id="secret-overlay">
+    <div class="secret-container">
+      <h2>أدخل رمز التفعيل المجاني للدخول</h2>
+      <input type="text" id="secret-code" placeholder="الرمز السري">
+      <br>
+      <button id="secret-submit">ادخال</button>
+      <p id="error-message" style="color: red; display: none;">
+        رمز خاطئ، حاول مرة أخرى
+      </p>
+      <p style="font-size: 17px; margin-top: 10px;">
+        اذا لم يكن لديك رمز تفعيل ، يمكنك الحصول عليه مجانًا في بوت التيليجرام؛
+        <a href="https://t.me/ii40TSM_bot" target="_blank">اضغط هنا</a>
+      </p>
     </div>
+  </div>
 
-    <div class="container">
-        <div class="banner" id="gridBanner"></div>
-        <div class="mobile-notice">لتظهر الأشكال السداسية بشكل أفضل، قم بتدوير الجوال</div>
-        <div class="hex-grid" id="hexGrid"></div>
-        <div class="party-text" id="partyText">مبروك</div>
-        <div class="icon-container">
-            <button id="shuffleButton" class="icon-btn" title="خلط الحروف"><i class="fas fa-random"></i></button>
-            <button id="swapColorsButton" class="icon-btn" title="عكس"><i class="fas fa-exchange-alt"></i></button>
-            <button id="changeColorsButton" class="icon-btn" title="تغيير الألوان"><i class="fas fa-palette"></i></button>
-            <button id="partyButton" class="icon-btn party-btn" title="بارتي">🎉</button>
-            <input type="range" id="resizeSlider" min="0.25" max="1.5" step="0.1" value="1" title="تكبير/تصغير">
-        </div>
-        <button id="copyLettersButton" class="copy-btn" title="نسخ الحروف"><i class="fas fa-copy"></i></button>
-
-        <!-- تأثير الشرارات -->
-        <div class="sparkle" style="left: 15%; top: 25%;"></div>
-        <div class="sparkle" style="left: 35%; top: 45%;"></div>
-        <div class="sparkle" style="left: 55%; top: 15%;"></div>
-        <div class="sparkle" style="left: 75%; top: 35%;"></div>
-        <div class="sparkle" style="left: 25%; top: 65%;"></div>
-
-        <!-- تأثير الفلاش -->
-        <div class="flash"></div>
-
-        <!-- إضافة عنصر الصوت المحلي -->
-        <audio id="partySound" src="party.mp3" preload="auto"></audio>
+  <!-- المحتوى الرئيسي للعبة -->
+  <div class="container">
+    <div class="banner" id="gridBanner"></div>
+    <div class="mobile-notice">
+      لتظهر الأشكال السداسية بشكل أفضل، قم بتدوير الجوال
     </div>
+    <div class="hex-grid" id="hexGrid"></div>
+    <div class="party-text" id="partyText">مبروك</div>
+    <div class="icon-container">
+      <button id="shuffleButton" class="icon-btn" title="خلط الحروف">
+        <i class="fas fa-random"></i>
+      </button>
+      <button id="swapColorsButton" class="icon-btn" title="عكس">
+        <i class="fas fa-exchange-alt"></i>
+      </button>
+      <button id="changeColorsButton" class="icon-btn" title="تغيير الألوان">
+        <i class="fas fa-palette"></i>
+      </button>
+      <button id="partyButton" class="icon-btn party-btn" title="بارتي">
+        🎉
+      </button>
+      <input type="range" id="resizeSlider" min="0.25" max="1.5" step="0.1" value="1" title="تكبير/تصغير">
+    </div>
+    <button id="copyLettersButton" class="copy-btn" title="نسخ الحروف">
+      <i class="fas fa-copy"></i>
+    </button>
 
-    <script>
-        // التحقق من الرمز السري عبر Netlify Function
-        document.getElementById("secret-submit").addEventListener("click", function () {
-            var code = document.getElementById("secret-code").value.trim();
+    <!-- تأثير الشرارات -->
+    <div class="sparkle" style="left: 15%; top: 25%;"></div>
+    <div class="sparkle" style="left: 35%; top: 45%;"></div>
+    <div class="sparkle" style="left: 55%; top: 15%;"></div>
+    <div class="sparkle" style="left: 75%; top: 35%;"></div>
+    <div class="sparkle" style="left: 25%; top: 65%;"></div>
 
-            fetch('/.netlify/functions/verify', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ code: code })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.valid) {
-                    document.getElementById("secret-overlay").style.display = "none";
-                } else {
-                    document.getElementById("error-message").style.display = "block";
-                }
-            })
-            .catch(err => console.error("Error during verification:", err));
+    <!-- تأثير الفلاش -->
+    <div class="flash"></div>
+
+    <!-- عنصر الصوت -->
+    <audio id="partySound" src="party.mp3" preload="auto"></audio>
+  </div>
+
+  <script>
+    // التحقق من الرمز السري عبر Netlify Function
+    document.getElementById("secret-submit").addEventListener("click", function () {
+      var code = document.getElementById("secret-code").value.trim();
+
+      fetch('/.netlify/functions/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: code })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.valid) {
+          document.getElementById("secret-overlay").style.display = "none";
+        } else {
+          document.getElementById("error-message").style.display = "block";
+        }
+      })
+      .catch(err => console.error("Error during verification:", err));
+    });
+
+    const letters = ['أ','ب','ت','ث','ج','ح','خ','د','ذ','ر','ز','س','ش','ص','ض','ط','ظ','ع','غ','ف','ق','ك','ل','م','ن','ه','و','ي'];
+
+    const colorSets = [
+      { red: "#ff4081", green: "#81c784" },
+      { red: "#f8bbd0", green: "#4dd0e1" },
+      { red: "#d32f2f", green: "#0288d1" },
+      { red: "#ff5722", green: "#388e3c" }
+    ];
+    let currentColorSetIndex = 0;
+    let partyInterval = null;
+
+    const partySound = document.getElementById("partySound");
+
+    function rgbToHex(rgb) {
+      if (!rgb || rgb === "") return "#ffffe0";
+      if (rgb.startsWith("#")) return rgb.toLowerCase();
+      const match = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+      if (!match) return "#ffffe0";
+      const r = parseInt(match[1]).toString(16).padStart(2, "0");
+      const g = parseInt(match[2]).toString(16).padStart(2, "0");
+      const b = parseInt(match[3]).toString(16).padStart(2, "0");
+      return `#${r}${g}${b}`.toLowerCase();
+    }
+
+    function createHexGrid() {
+      const grid = document.getElementById("hexGrid");
+      const layout = Array(7).fill().map(() => Array(7).fill(""));
+
+      layout.forEach((row, rowIndex) => {
+        const rowDiv = document.createElement("div");
+        rowDiv.className = "row";
+
+        row.forEach((_, colIndex) => {
+          const hex = document.createElement("div");
+          hex.className = "hexagon";
+
+          if (rowIndex === 0) {
+            if (colIndex === 0 || colIndex === 6) {
+              hex.classList.add("green-fixed", "outer-fixed-top-left");
+            } else {
+              hex.classList.add("red-fixed", "outer-fixed-top");
+            }
+          } else if (rowIndex === 6) {
+            if (colIndex === 0 || colIndex === 6) {
+              hex.classList.add("green-fixed", "outer-fixed-bottom-left");
+            } else {
+              hex.classList.add("red-fixed", "outer-fixed-bottom");
+            }
+          } else if (colIndex === 0 || colIndex === 6) {
+            hex.classList.add("green-fixed");
+            if (colIndex === 6 && [1,3,5].includes(rowIndex)) {
+              hex.classList.add("outer-fixed-odd-right");
+            } else if (colIndex === 0 && [2,4].includes(rowIndex)) {
+              hex.classList.add("outer-fixed-even-left");
+            }
+          } else {
+            hex.classList.add("changeable");
+          }
+
+          rowDiv.appendChild(hex);
         });
 
-        const letters = ['أ', 'ب', 'ت', 'ث', 'ج', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ك', 'ل', 'م', 'ن', 'ه', 'و', 'ي'];
+        grid.appendChild(rowDiv);
+      });
+    }
 
-        const colorSets = [
-            { red: '#ff4081', green: '#81c784' },
-            { red: '#f8bbd0', green: '#4dd0e1' },
-            { red: '#d32f2f', green: '#0288d1' },
-            { red: '#ff5722', green: '#388e3c' }
-        ];
-        let currentColorSetIndex = 0;
-        let partyInterval = null;
+    function shuffleLetters() {
+      const hexagons = document.querySelectorAll(".changeable");
+      const available = [...letters];
+      const shuffled = [];
 
-        // الوصول إلى عنصر الصوت
-        const partySound = document.getElementById('partySound');
+      for (let i = 0; i < hexagons.length; i++) {
+        const idx = Math.floor(Math.random() * available.length);
+        shuffled.push(available[idx]);
+        available.splice(idx, 1);
+      }
 
-        function rgbToHex(rgb) {
-            if (!rgb || rgb === '') return '#ffffe0';
-            if (rgb.startsWith('#')) return rgb.toLowerCase();
-            const match = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-            if (!match) return '#ffffe0';
-            const r = parseInt(match[1]).toString(16).padStart(2, '0');
-            const g = parseInt(match[2]).toString(16).padStart(2, '0');
-            const b = parseInt(match[3]).toString(16).padStart(2, '0');
-            return `#${r}${g}${b}`.toLowerCase();
-        }
+      hexagons.forEach((hex, i) => {
+        hex.classList.add("fade");
+        setTimeout(() => {
+          hex.textContent = shuffled[i];
+          hex.dataset.letter = shuffled[i];
+          hex.style.backgroundColor = "#ffffe0";
+          hex.classList.remove("fade");
+        }, 50 * i);
+      });
 
-        function createHexGrid() {
-            const grid = document.getElementById('hexGrid');
-            const layout = Array(7).fill().map(() => Array(7).fill(''));
+      stopPartyMode();
+    }
 
-            layout.forEach((row, rowIndex) => {
-                const rowDiv = document.createElement('div');
-                rowDiv.className = 'row';
+    function swapColors() {
+      const reds = document.querySelectorAll(".red-fixed");
+      const greens = document.querySelectorAll(".green-fixed");
+      const changeables = document.querySelectorAll(".changeable");
+      const set = colorSets[currentColorSetIndex];
 
-                row.forEach((_, colIndex) => {
-                    const hex = document.createElement('div');
-                    hex.className = 'hexagon';
-                    if (rowIndex === 0) {
-                        if (colIndex === 0 || colIndex === 6) {
-                            hex.classList.add('green-fixed', 'outer-fixed-top-left');
-                        } else {
-                            hex.classList.add('red-fixed', 'outer-fixed-top');
-                        }
-                    } else if (rowIndex === 6) {
-                        if (colIndex === 0 || colIndex === 6) {
-                            hex.classList.add('green-fixed', 'outer-fixed-bottom-left');
-                        } else {
-                            hex.classList.add('red-fixed', 'outer-fixed-bottom');
-                        }
-                    } else if (colIndex === 0 || colIndex === 6) {
-                        hex.classList.add('green-fixed');
-                        if (colIndex === 6 && [1,3,5].includes(rowIndex)) {
-                            hex.classList.add('outer-fixed-odd-right');
-                        } else if (colIndex === 0 && [2,4].includes(rowIndex)) {
-                            hex.classList.add('outer-fixed-even-left');
-                        }
-                    } else {
-                        hex.classList.add('changeable');
-                    }
-                    rowDiv.appendChild(hex);
-                });
+      reds.forEach(h => {
+        h.classList.replace("red-fixed", "green-fixed");
+        h.style.backgroundColor = set.green;
+      });
+      greens.forEach(h => {
+        h.classList.replace("green-fixed", "red-fixed");
+        h.style.backgroundColor = set.red;
+      });
+      changeables.forEach(h => {
+        const c = rgbToHex(h.style.backgroundColor);
+        h.style.backgroundColor = (c === set.red ? set.green : c === set.green ? set.red : c);
+      });
+    }
 
-                grid.appendChild(rowDiv);
-            });
-        }
+    function changeColorSet() {
+      const old = colorSets[currentColorSetIndex];
+      currentColorSetIndex = (currentColorSetIndex + 1) % colorSets.length;
+      const cur = colorSets[currentColorSetIndex];
 
-        function shuffleLetters() {
-            const hexagons = document.querySelectorAll('.changeable');
-            const availableLetters = [...letters];
-            const shuffled = [];
+      document.querySelectorAll(".red-fixed").forEach(h => {
+        h.classList.add("color-transition");
+        h.style.backgroundColor = cur.red;
+      });
+      document.querySelectorAll(".green-fixed").forEach(h => {
+        h.classList.add("color-transition");
+        h.style.backgroundColor = cur.green;
+      });
+      document.querySelectorAll(".changeable").forEach(h => {
+        h.classList.add("color-transition");
+        const c = rgbToHex(h.style.backgroundColor);
+        if (c === old.red) h.style.backgroundColor = cur.red;
+        else if (c === old.green) h.style.backgroundColor = cur.green;
+      });
 
-            for (let i = 0; i < hexagons.length; i++) {
-                const randomIndex = Math.floor(Math.random() * availableLetters.length);
-                shuffled.push(availableLetters[randomIndex]);
-                availableLetters.splice(randomIndex, 1);
-            }
+      setTimeout(() => {
+        document.querySelectorAll(".color-transition").forEach(h => h.classList.remove("color-transition"));
+      }, 500);
 
-            hexagons.forEach((hex, index) => {
-                hex.classList.add('fade');
-                setTimeout(() => {
-                    hex.textContent = shuffled[index];
-                    hex.dataset.letter = shuffled[index];
-                    hex.style.backgroundColor = '#ffffe0';
-                    hex.classList.remove('fade');
-                }, 50 * index);
-            });
-            stopPartyMode();
-        }
+      stopPartyMode();
+    }
 
-        function swapColors() {
-            const redHexagons = document.querySelectorAll('.red-fixed');
-            const greenHexagons = document.querySelectorAll('.green-fixed');
-            const changeableHexagons = document.querySelectorAll('.changeable');
-            const currentSet = colorSets[currentColorSetIndex];
+    function partyMode() {
+      if (partyInterval) return;
+      const text = document.getElementById("partyText");
+      partySound.currentTime = 0;
+      partySound.play().catch(err => console.error("فشل تشغيل الصوت:", err));
+      text.style.display = "block";
+      document.body.classList.add("active");
 
-            redHexagons.forEach(hex => {
-                hex.classList.remove('red-fixed');
-                hex.classList.add('green-fixed');
-                hex.style.backgroundColor = currentSet.green;
-            });
+      partyInterval = setInterval(() => {
+        swapColors();
+        const set = colorSets[currentColorSetIndex];
+        text.style.color = (rgbToHex(text.style.color) === "#ffd700" ? set.red : "#ffd700");
+      }, 300);
 
-            greenHexagons.forEach(hex => {
-                hex.classList.remove('green-fixed');
-                hex.classList.add('red-fixed');
-                hex.style.backgroundColor = currentSet.red;
-            });
+      setTimeout(stopPartyMode, 5000);
+    }
 
-            changeableHexagons.forEach(hex => {
-                const currentColor = rgbToHex(hex.style.backgroundColor);
-                if (currentColor === currentSet.red) {
-                    hex.style.backgroundColor = currentSet.green;
-                } else if (currentColor === currentSet.green) {
-                    hex.style.backgroundColor = currentSet.red;
-                }
-            });
-        }
+    function stopPartyMode() {
+      if (!partyInterval) return;
+      clearInterval(partyInterval);
+      partyInterval = null;
+      document.querySelectorAll(".hexagon").forEach(h => h.classList.remove("color-transition"));
+      document.getElementById("partyText").style.display = "none";
+      document.body.classList.remove("active");
+      partySound.pause();
+      partySound.currentTime = 0;
+    }
 
-        function changeColorSet() {
-            const oldSet = colorSets[currentColorSetIndex];
-            currentColorSetIndex = (currentColorSetIndex + 1) % colorSets.length;
-            const currentSet = colorSets[currentColorSetIndex];
-            const redHexagons = document.querySelectorAll('.red-fixed');
-            const greenHexagons = document.querySelectorAll('.green-fixed');
-            const changeableHexagons = document.querySelectorAll('.changeable');
+    document.addEventListener("click", e => {
+      if (e.target.classList.contains("changeable")) {
+        const hex = e.target;
+        const c = rgbToHex(hex.style.backgroundColor);
+        const set = colorSets[currentColorSetIndex];
+        let newColor = "#ffffe0";
+        if (c === "#ffffe0") newColor = "#ffa500";
+        else if (c === "#ffa500") newColor = set.green;
+        else if (c === set.green) newColor = set.red;
+        hex.style.backgroundColor = newColor;
+      }
+    });
 
-            redHexagons.forEach(hex => {
-                hex.classList.add('color-transition');
-                hex.style.backgroundColor = currentSet.red;
-            });
+    function copyLetters() {
+      const arr = Array.from(document.querySelectorAll(".changeable")).map(h => h.textContent);
+      navigator.clipboard.writeText(arr.join(" ")).then(() => {
+        alert("تم نسخ الحروف بنجاح!");
+      }).catch(err => {
+        console.error("فشل في النسخ: ", err);
+        alert("حدث خطأ أثناء النسخ.");
+      });
+    }
 
-            greenHexagons.forEach(hex => {
-                hex.classList.add('color-transition');
-                hex.style.backgroundColor = currentSet.green;
-            });
+    document.getElementById("shuffleButton").addEventListener("click", shuffleLetters);
+    document.getElementById("swapColorsButton").addEventListener("click", swapColors);
+    document.getElementById("changeColorsButton").addEventListener("click", changeColorSet);
+    document.getElementById("partyButton").addEventListener("click", partyMode);
+    document.getElementById("copyLettersButton").addEventListener("click", copyLetters);
+    document.getElementById("resizeSlider").addEventListener("input", e => {
+      document.documentElement.style.setProperty("--scale", e.target.value);
+    });
 
-            changeableHexagons.forEach(hex => {
-                hex.classList.add('color-transition');
-                const currentColor = rgbToHex(hex.style.backgroundColor);
-                if (currentColor === oldSet.red) {
-                    hex.style.backgroundColor = currentSet.red;
-                } else if (currentColor === oldSet.green) {
-                    hex.style.backgroundColor = currentSet.green;
-                }
-            });
+    window.onload = () => {
+      createHexGrid();
+      shuffleLetters();
+    };
+  </script>
 
-            setTimeout(() => {
-                document.querySelectorAll('.color-transition').forEach(hex => {
-                    hex.classList.remove('color-transition');
-                });
-            }, 500);
-            stopPartyMode();
-        }
-
-        function partyMode() {
-            if (partyInterval) return;
-            const partyText = document.getElementById('partyText');
-
-            partySound.currentTime = 0;
-            partySound.play().catch(err => console.error('فشل تشغيل الصوت:', err));
-
-            partyText.style.display = 'block';
-            document.body.classList.add('active');
-            document.querySelectorAll('.hexagon').forEach(hex => {
-                hex.classList.add('color-transition');
-            });
-
-            partyInterval = setInterval(() => {
-                swapColors();
-                const currentSet = colorSets[currentColorSetIndex];
-                const currentTextColor = rgbToHex(partyText.style.color);
-                partyText.style.color = (currentTextColor === '#ffd700') ? currentSet.red : '#ffd700';
-            }, 300);
-
-            setTimeout(() => {
-                stopPartyMode();
-            }, 5000);
-        }
-
-        function stopPartyMode() {
-            if (partyInterval) {
-                clearInterval(partyInterval);
-                partyInterval = null;
-                document.querySelectorAll('.hexagon').forEach(hex => {
-                    hex.classList.remove('color-transition');
-                });
-                document.getElementById('partyText').style.display = 'none';
-                document.body.classList.remove('active');
-                partySound.pause();
-                partySound.currentTime = 0;
-            }
-        }
-
-        document.addEventListener('click', (e) => {
-            const hex = e.target;
-            if (hex.classList.contains('changeable')) {
-                const currentColor = rgbToHex(hex.style.backgroundColor);
-                const currentSet = colorSets[currentColorSetIndex];
-                let newColor;
-
-                if (currentColor === '#ffffe0') {
-                    newColor = '#ffa500';
-                } else if (currentColor === '#ffa500') {
-                    newColor = currentSet.green;
-                } else if (currentColor === currentSet.green) {
-                    newColor = currentSet.red;
-                } else if (currentColor === currentSet.red) {
-                    newColor = '#ffffe0'; 
-                } else {
-                    newColor = '#ffffe0';
-                }
-                hex.style.backgroundColor = newColor;
-            }
-        });
-
-        function copyLetters() {
-            const changeableHexagons = document.querySelectorAll('.changeable');
-            let letterText = '';
-            changeableHexagons.forEach(hex => {
-                letterText += hex.textContent + ' ';
-            });
-            navigator.clipboard.writeText(letterText.trim()).then(() => {
-                alert('تم نسخ الحروف بنجاح!');
-            }).catch(err => {
-                console.error('فشل في النسخ: ', err);
-                alert('حدث خطأ أثناء النسخ.');                               
-            });
-        }
-
-        document.getElementById('shuffleButton').addEventListener('click', shuffleLetters);
-        document.getElementById('swapColorsButton').addEventListener('click', swapColors);
-        document.getElementById('changeColorsButton').addEventListener('click', changeColorSet);
-        document.getElementById('partyButton').addEventListener('click', partyMode);
-        document.getElementById('copyLettersButton').addEventListener('click', copyLetters);
-        document.getElementById('resizeSlider').addEventListener('input', function(e) {
-            const scale = e.target.value;
-            document.documentElement.setProperty('--scale', scale);
-        });
-
-        window.onload = function() {
-            createHexGrid();
-            shuffleLetters();
-        };
-    </script>
+  <!-- Cloudflare snippet -->
+  <script>
+    (function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'924a89600f9644de',t:'MTc0MjY5NzMzOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
+  </script>
 </body>
 </html>
