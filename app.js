@@ -1,8 +1,10 @@
 // app.js
+
 // التحقق من الرمز السري عبر Netlify Function
 document.getElementById("secret-submit").addEventListener("click", function () {
   var code = document.getElementById("secret-code").value.trim();
 
+  // تم تعديل المسار ليُرسل الطلب إلى دالة Netlify:
   fetch('/.netlify/functions/verify', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -32,6 +34,7 @@ const colorSets = [
 let currentColorSetIndex = 0;
 let partyInterval = null;
 
+// الوصول إلى عنصر الصوت
 const partySound = document.getElementById("partySound");
 
 function rgbToHex(rgb) {
@@ -53,26 +56,21 @@ function createHexGrid() {
     const rowDiv = document.createElement("div");
     rowDiv.className = "row";
 
-    row.forEach((_, colIndex) => {
+    row.forEach((letter, colIndex) => {
       const hex = document.createElement("div");
       hex.className = "hexagon";
 
-      if (rowIndex === 0) {
-        // الصف الأعلى
-        if (colIndex === 0 || colIndex === 6) {
-          hex.classList.add("green-fixed", "outer-fixed-top-left");
-        } else {
-          hex.classList.add("red-fixed", "outer-fixed-top");
-        }
-      } else if (rowIndex === 6) {
-        // الصف الأسفل
-        if (colIndex === 0 || colIndex === 6) {
-          hex.classList.add("green-fixed", "outer-fixed-bottom-left");
-        } else {
-          hex.classList.add("red-fixed", "outer-fixed-bottom");
-        }
+      // خلايا ثابتة في الحواف
+      if (rowIndex === 0 || rowIndex === 6) {
+        // الصف الأعلى والأسفل
+        const isCorner = (colIndex === 0 || colIndex === 6);
+        hex.classList.add(isCorner ? "green-fixed" : "red-fixed");
+        hex.classList.add(rowIndex === 0
+          ? (isCorner ? "outer-fixed-top-left" : "outer-fixed-top")
+          : (isCorner ? "outer-fixed-bottom-left" : "outer-fixed-bottom")
+        );
       } else if (colIndex === 0 || colIndex === 6) {
-        // الأعمدة الجانبية
+        // أعمدة اليمين واليسار وسطياً
         hex.classList.add("green-fixed");
         if (colIndex === 6 && [1,3,5].includes(rowIndex)) {
           hex.classList.add("outer-fixed-odd-right");
@@ -80,7 +78,7 @@ function createHexGrid() {
           hex.classList.add("outer-fixed-even-left");
         }
       } else {
-        // الخلايا القابلة للتغيير
+        // خلايا يمكن تغييرها
         hex.classList.add("changeable");
       }
 
@@ -198,6 +196,7 @@ document.addEventListener("click", e => {
     if (c === "#ffffe0") newColor = "#ffa500";
     else if (c === "#ffa500") newColor = set.green;
     else if (c === set.green) newColor = set.red;
+    else if (c === set.red) newColor = "#ffffe0";
     hex.style.backgroundColor = newColor;
   }
 });
@@ -228,7 +227,7 @@ window.onload = () => {
   shuffleLetters();
 };
 
-// كود Cloudflare (لم يتم تغييره)
+// الكود الخاص بإطار Cloudflare (كما هو دون تعديل)
 (function () {
   function c() {
     var b = a.contentDocument || a.contentWindow.document;
