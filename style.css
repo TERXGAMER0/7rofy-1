@@ -37,6 +37,7 @@
   cursor: pointer;
 }
 
+/* ========== تصميم اللعبة (مطابق index.html) ========== */
 :root {
   --scale: 1; /* قيمة التحجيم الافتراضية */
 }
@@ -63,7 +64,7 @@
   color: #fff;
   text-align: center;
   font-size: 24px;
-  font-family: "Tahoma", sans-serif;
+  font-family: 'Tahoma', sans-serif;
   margin-bottom: 10px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -105,23 +106,15 @@
 .hexagon {
   width: calc(80px * var(--scale));
   height: calc(92px * var(--scale));
-  clip-path: polygon(
-    50% 0%,
-    100% 25%,
-    100% 75%,
-    50% 100%,
-    0% 75%,
-    0% 25%
-  );
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: calc(28px * var(--scale));
-  font-family: "Tahoma", sans-serif;
+  font-family: 'Tahoma', sans-serif;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s, width 0.3s ease, height 0.3s ease,
-    font-size 0.3s ease;
+  transition: background-color 0.3s, width 0.3s ease, height 0.3s ease, font-size 0.3s ease;
   position: relative;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   background-color: #ffffe0;
@@ -132,7 +125,7 @@
 }
 
 .hexagon::before {
-  content: "";
+  content: '';
   position: absolute;
   width: 100%;
   height: 100%;
@@ -151,14 +144,8 @@
 }
 
 @keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
+  0% { opacity: 0; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
 .red-fixed {
@@ -290,7 +277,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 120px;
-  font-family: "Tahoma", sans-serif;
+  font-family: 'Tahoma', sans-serif;
   font-weight: bold;
   color: #ffd700;
   text-shadow: 2px 2px 5px #ff4500;
@@ -302,12 +289,8 @@
 }
 
 @keyframes pulse {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1.2);
-  }
+  0% { transform: translate(-50%, -50%) scale(1); }
+  100% { transform: translate(-50%, -50%) scale(1.2); }
 }
 
 .sparkle {
@@ -321,18 +304,9 @@
 }
 
 @keyframes sparkle {
-  0% {
-    opacity: 0;
-    transform: scale(0);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.5);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(0);
-  }
+  0% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1.5); }
+  100% { opacity: 0; transform: scale(0); }
 }
 
 .active .sparkle {
@@ -352,15 +326,9 @@
 }
 
 @keyframes flash {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 .active .flash {
@@ -373,7 +341,7 @@
   color: #856404;
   padding: 10px;
   text-align: center;
-  font-family: "Tahoma", sans-serif;
+  font-family: 'Tahoma', sans-serif;
   font-size: 16px;
   border-radius: 5px;
   margin-bottom: 10px;
