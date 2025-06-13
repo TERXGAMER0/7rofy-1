@@ -61,14 +61,12 @@ function createHexGrid() {
       hex.className = "hexagon";
 
       // خلايا ثابتة في الحواف
-      if (rowIndex === 0 || rowIndex === 6) {
-        // الصف الأعلى والأسفل
-        const isCorner = (colIndex === 0 || colIndex === 6);
-        hex.classList.add(isCorner ? "green-fixed" : "red-fixed");
-        hex.classList.add(rowIndex === 0
-          ? (isCorner ? "outer-fixed-top-left" : "outer-fixed-top")
-          : (isCorner ? "outer-fixed-bottom-left" : "outer-fixed-bottom")
-        );
+if (rowIndex === 0 || rowIndex === 6) {
+  const isTop = rowIndex === 0;
+  // صفوف الأعلى والأسفل: كل الخلايا الجانبية تكون green-fixed
+  hex.classList.add("green-fixed");
+  // نستخدم outer-fixed-top أو outer-fixed-bottom للجميع
+  hex.classList.add(isTop ? "outer-fixed-top" : "outer-fixed-bottom");
       } else if (colIndex === 0 || colIndex === 6) {
         // أعمدة اليمين واليسار وسطياً
         hex.classList.add("green-fixed");
